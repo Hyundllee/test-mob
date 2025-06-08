@@ -17,7 +17,6 @@
 </template>
 
 <script setup lang="ts">
-import { removeUnwantedTabindex } from '~/utils/accessibility'
 import { nextTick, watch, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -27,13 +26,14 @@ watch(
   () => route.fullPath,
   async () => {
     await nextTick()
+
+    // ✅ Quasar 요소 초기 렌더링 이후로 지연
     setTimeout(() => {
-      document.getElementById('top')?.focus()
-      removeUnwantedTabindex()
-    }, 50)
+      const el = document.getElementById('top')
+      el?.focus()
+    }, 100)  // 여유 있게 100ms 정도 지연 (경험상 Quasar 렌더보다 살짝 늦게)
   }
 )
-
 </script>
 
 <style scoped>
