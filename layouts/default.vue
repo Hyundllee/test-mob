@@ -1,6 +1,16 @@
 <!-- layouts/default.vue -->
 <template>
   <q-layout view="lHh Lpr lFf">
+    <!-- 페이지 진입 알림용 -->
+    <div
+      id="page-start"
+      class="sr-only"
+      tabindex="-1"
+      :aria-label="`${pageTitle} 시작`"
+    >
+      {{ pageTitle }} 시작
+    </div>
+
     <AppHeader />
     <q-page-container>
 
@@ -14,19 +24,20 @@
 import { nextTick, watch, ref } from 'vue'
 import { useRoute } from 'vue-router'
 const route = useRoute()
+// 페이지 제목 가져오기
+const pageTitle = computed(() => route.meta.title || '페이지')
+
 watch(
   () => route.fullPath,
   async () => {
     await nextTick()
 
-    // 강제로 스크롤 최상단 이동
+    // 스크롤 상단 이동
     window.scrollTo({ top: 0 })
 
-    // 강제로 초점 이동 (모바일 스크린리더용)
-    const el = document.getElementById('page-heading')
-    if (el) {
-      el.focus()
-    }
+    // 페이지 시작 영역 포커싱
+    const el = document.getElementById('page-start')
+    el?.focus()
   }
 )
 </script>

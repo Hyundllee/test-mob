@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-md" role="main">
-    <h1 class="text-h5 q-mb-lg" id="page-heading" tabindex="-1" >고객센터</h1>
+    <h1 class="text-h5 q-mb-lg" id="page-heading" >고객센터</h1>
 
     <q-tabs
       v-model="currentTab"
