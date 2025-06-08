@@ -22,8 +22,21 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
+// 🚀 helper: tab만 바뀐 건지 비교
+function isOnlyTabChanged(to: any, from: any): boolean {
+  if (to.path !== from.path) return false
+
+  const { tab: toTab, ...toRest } = to.query
+  const { tab: fromTab, ...fromRest } = from.query
+
+  return (
+    toTab !== fromTab &&
+    JSON.stringify(toRest) === JSON.stringify(fromRest)
+  )
+}
+
 onMounted(() => {
-  // ✅ 페이지 전환 전 포커스 제거
+  // ✅ 포커스 제거
   router.beforeEach((to, from, next) => {
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur()
@@ -31,18 +44,9 @@ onMounted(() => {
     next()
   })
 
-  // ✅ 페이지 전환 후 포커싱
+  // ✅ 페이지 이동 후 포커싱
   router.afterEach((to, from) => {
-    // tab만 바뀌었는지 확인
-    const onlyTabChanged = (
-      to.path === from.path &&
-      to.query.tab !== from.query.tab &&
-      // 나머지 query가 같아야 함
-      JSON.stringify({ ...to.query, tab: undefined }) ===
-      JSON.stringify({ ...from.query, tab: undefined })
-    )
-
-    if (onlyTabChanged) return // ✅ 탭만 바뀐 경우 포커싱 무시
+    if (isOnlyTabChanged(to, from)) return
 
     setTimeout(() => {
       document.getElementById('top')?.focus()
@@ -50,6 +54,8 @@ onMounted(() => {
   })
 })
 </script>
+
+
 <style scoped>
 /* scoped든 global이든 */
 .sr-only {
