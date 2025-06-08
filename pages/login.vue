@@ -3,7 +3,7 @@
     <q-card flat bordered class="q-pa-lg shadow-1 login-card">
 
       <!-- 제목 -->
-      <h1 id="page-heading" class="text-h5 text-center q-mb-md" >로그인</h1>
+      <h1 class="text-h5 text-center q-mb-md" >로그인</h1>
 
       <!-- 로그인 폼 -->
       <q-form @submit.prevent="handleLogin" class="q-gutter-md" aria-label="로그인 폼">

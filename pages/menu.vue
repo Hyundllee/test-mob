@@ -10,7 +10,7 @@
         @click="goBack"
       />
       <q-toolbar-title>
-        <h2 class="text-subtitle1 q-ma-none" id="page-heading" tabindex="-1" >전체 메뉴</h2>
+        <h2 class="text-subtitle1 q-ma-none" id="page-start" tabindex="-1" >전체 메뉴</h2>
       </q-toolbar-title>
     </q-toolbar>
 
