@@ -18,34 +18,28 @@
   </q-layout>
 </template>
 
-<script setup lang="ts">
-import { onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+<script setup>
+import { nextTick } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
+const route = useRoute()
 
-onMounted(() => {
-  // ✅ 페이지 전환 전 기존 포커스 제거
-  router.beforeEach((to, from, next) => {
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur()
-    }
-    next()
+let previousPath = route.path
+
+router.afterEach((to, from) => {
+  const isSamePath = to.path === from.path
+
+  if (isSamePath) return // ✅ query(tab) 변경처럼 페이지 전환이 아닐 경우 무시
+
+  nextTick(() => {
+    setTimeout(() => {
+      const el = document.getElementById('top')
+      el?.focus({ preventScroll: true })
+    }, 250)
   })
 
-  // ✅ 페이지 전환 후 최상단으로 포커싱
-router.afterEach((to, from) => {
-  const isTabChangeOnly =
-    to.path === from.path &&
-    to.query.tab !== from.query.tab &&
-    JSON.stringify({ ...to.query, tab: undefined }) === JSON.stringify({ ...from.query, tab: undefined })
-
-  if (isTabChangeOnly) return
-
-  setTimeout(() => {
-    document.getElementById('top')?.focus()
-  }, 200)
-})
+  previousPath = to.path
 })
 </script>
 
