@@ -17,23 +17,19 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, watch, ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
-const route = useRoute()
+const router = useRouter()
 
-watch(
-  () => route.fullPath,
-  async () => {
-    await nextTick()
-
-    // ✅ Quasar 요소 초기 렌더링 이후로 지연
+onMounted(() => {
+  router.afterEach(() => {
     setTimeout(() => {
-      const el = document.getElementById('top')
-      el?.focus()
-    }, 100)  // 여유 있게 100ms 정도 지연 (경험상 Quasar 렌더보다 살짝 늦게)
-  }
-)
+      const topEl = document.getElementById('top')
+      topEl?.focus()
+    }, 200) // ✅ VoiceOver 대응 지연시간
+  })
+})
 </script>
 
 <style scoped>
