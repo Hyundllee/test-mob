@@ -1,7 +1,56 @@
-@import './utils.scss'; // .sr-only 등 접근성 유틸
+@import './utils.scss'; // 접근성 유틸
 @import './main.scss';  // 메인 콘텐츠 스타일
 
-/* 모바일 전용 스타일 (max-width: 760px) */
+/* 로그인 페이지 스타일 */
+.login-page {
+  min-height: 100vh;
+  background-color: #f9fafb;
+
+  .login-card {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    border-radius: 16px;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+}
+
+/* 회원가입 페이지 스타일 */
+.register-page {
+  min-height: 100vh;
+  background-color: #f9fafb;
+
+  .register-card {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: 16px;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+}
+
+/* 고객센터 페이지 스타일 */
+.support-page {
+  max-width: 760px;
+  margin: 0 auto;
+
+  .support-card {
+    border-radius: 12px;
+    background-color: #ffffff;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+}
+
+/* 모바일 전용 스타일 */
 @media (max-width: 760px) {
   body {
     font-size: 15px;
@@ -17,13 +66,11 @@
     padding: 16px !important;
   }
 
-  /* 예시: 버튼 크기 조정 */
   .q-btn {
     font-size: 14px;
     padding: 8px 12px;
   }
 
-  /* 푸터/헤더 여백 조정 등 */
   footer,
   header {
     padding: 12px;

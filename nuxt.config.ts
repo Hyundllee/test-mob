@@ -9,7 +9,7 @@ export default defineNuxtConfig({
   preset : 'github-pages' 
   },
   app : {
-  baseURL : '/my-repository-url/' 
+  baseURL : '/test-mob/' 
   },
    css: ['@/assets/styles/mobile.scss', '@/assets/styles/mobile.scss',],
 })

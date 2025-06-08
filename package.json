@@ -8,7 +8,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "deploy": "gh-pages --dotfiles -d .output/public -f"
+    "deploy": "gh-pages --dotfiles -d .output/public -f",
+    "homepage": "https://Hyundllee.github.io/test-mob/"
   },
   "dependencies": {
     "@quasar/extras": "^1.17.0",
