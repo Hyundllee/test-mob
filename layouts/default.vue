@@ -23,11 +23,22 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 onMounted(() => {
+  // ✅ 페이지 전환 전 기존 포커스 제거
+  router.beforeEach((to, from, next) => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur()
+    }
+    next()
+  })
+
+  // ✅ 페이지 전환 후 최상단으로 포커싱
   router.afterEach(() => {
+    document.body.style.pointerEvents = 'none'
+
     setTimeout(() => {
-      const topEl = document.getElementById('top')
-      topEl?.focus()
-    }, 300) // ✅ VoiceOver 대응 지연시간
+      document.body.style.pointerEvents = ''
+      document.getElementById('top')?.focus()
+    }, 200) // voiceover 대응: 약간의 지연
   })
 })
 </script>
