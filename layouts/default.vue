@@ -32,14 +32,18 @@ onMounted(() => {
   })
 
   // ✅ 페이지 전환 후 최상단으로 포커싱
-  router.afterEach(() => {
-    document.body.style.pointerEvents = 'none'
+router.afterEach((to, from) => {
+  const isTabChangeOnly =
+    to.path === from.path &&
+    to.query.tab !== from.query.tab &&
+    JSON.stringify({ ...to.query, tab: undefined }) === JSON.stringify({ ...from.query, tab: undefined })
 
-    setTimeout(() => {
-      document.body.style.pointerEvents = ''
-      document.getElementById('top')?.focus()
-    }, 200) // voiceover 대응: 약간의 지연
-  })
+  if (isTabChangeOnly) return
+
+  setTimeout(() => {
+    document.getElementById('top')?.focus()
+  }, 200)
+})
 })
 </script>
 
