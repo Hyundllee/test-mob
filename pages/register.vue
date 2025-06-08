@@ -2,7 +2,7 @@
 
   <q-page class="register-page q-pa-md flex flex-center" role="main">
     <q-card flat bordered class="q-pa-lg shadow-1 register-card">
-      <h1 class="text-h5 text-center q-mb-lg" >회원가입</h1>
+      <h1 class="text-h5 text-center q-mb-lg" id="page-heading" tabindex="-1"  >회원가입</h1>
 
       <!-- ✅ QStepper -->
       <q-stepper
