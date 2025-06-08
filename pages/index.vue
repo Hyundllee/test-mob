@@ -1,7 +1,9 @@
 <template>
   <q-page class="main-content q-pa-md" role="main">
     <!-- 스크린리더 전용 제목 -->
-    <h1 class="sr-only">모바일 접근성 메인 페이지</h1>
+    <h1 id="page-heading" class="sr-only" tabindex="-1">
+      페이지 진입: {{ pageTitle }}
+    </h1>
 
     <!-- 소개 카드 -->
     <q-card flat bordered class="q-pa-md q-mb-lg bg-grey-1">
@@ -41,6 +43,13 @@
 </template>
 
 <script setup lang="ts">
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+
+
+const route = useRoute()
+const pageTitle = computed(() => route.meta.title || '모바일 접근성 메인 페이지')
+
 const features = [
   '시맨틱 태그 기반의 콘텐츠 구조',
   '모든 인터랙션 요소에 키보드 접근 지원',
@@ -49,7 +58,6 @@ const features = [
 ]
 
 const goToGuide = () => {
-  // 추후 라우터 연동: navigateTo('/guide') 등
   console.log('접근성 가이드 버튼 클릭됨')
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-md" role="main">
-    <h1 class="text-h5 q-mb-lg" tabindex="0">고객센터</h1>
+    <h1 class="text-h5 q-mb-lg" tabindex="-1">{{pageTitle}}</h1>
 
     <q-tabs
       v-model="currentTab"
@@ -35,6 +35,10 @@ import { useRoute, useRouter } from 'vue-router'
 import SupportFAQ from '~/components/support/SupportFAQ.vue'
 import SupportNotice from '~/components/support/SupportNotice.vue'
 import SupportContact from '~/components/support/SupportContact.vue'
+
+import { computed } from 'vue'
+
+const pageTitle = computed(() => route.meta.title || '고객센터')
 
 const route = useRoute()
 const router = useRouter()

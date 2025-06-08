@@ -1,4 +1,8 @@
 <template>
+        <!-- 스크린리더 전용 제목 -->
+    <h1 class="sr-only" tabindex="-1" id="page-heading" >
+      페이지 진입: {{ pageTitle }}
+    </h1>
   <q-page class="q-pa-md">
     <q-toolbar class="bg-white text-black" style="position: sticky; top: 0; z-index: 10;">
       <q-btn
@@ -46,6 +50,11 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+
+const route = useRoute()
+const pageTitle = computed(() => route.meta.title || '전체 메뉴')
 
 const router = useRouter()
 

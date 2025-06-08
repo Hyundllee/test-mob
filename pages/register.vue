@@ -1,7 +1,8 @@
 <template>
+
   <q-page class="register-page q-pa-md flex flex-center" role="main">
     <q-card flat bordered class="q-pa-lg shadow-1 register-card">
-      <h1 class="text-h5 text-center q-mb-lg" tabindex="0">회원가입</h1>
+      <h1 class="text-h5 text-center q-mb-lg" tabindex="-1">{{ pageTitle }}</h1>
 
       <!-- ✅ QStepper -->
       <q-stepper
@@ -45,7 +46,7 @@
         />
       </div>
     </q-card>
-  </q-page>
+  </q-page>å
 </template>
 
 <script setup lang="ts">
@@ -55,6 +56,12 @@ import { ref } from 'vue'
 import Step1UserType from '~/components/register/Step1UserType.vue'
 import Step2Terms from '~/components/register/Step2Terms.vue'
 import Step3Verify from '~/components/register/Step3Verify.vue'
+
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+
+const route = useRoute()
+const pageTitle = computed(() => route.meta.title || '회원가입')
 
 // 상태
 const step = ref(1)
