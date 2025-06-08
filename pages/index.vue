@@ -16,7 +16,7 @@
 
     <!-- 기능 목록 -->
     <q-card flat bordered class="q-pa-md bg-grey-1">
-      <h2 class="text-h6 text-primary q-mb-sm">주요 기능</h2>
+      <h2 class="text-h6 text-primary q-mb-sm"Z>주요 기능</h2>
       <q-list dense>
         <q-item v-for="(item, index) in features" :key="index" clickable tag="li" tabindex="0">
           <q-item-section avatar>

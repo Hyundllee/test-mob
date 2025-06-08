@@ -3,7 +3,7 @@
     <q-card flat bordered class="q-pa-lg shadow-1 login-card">
 
       <!-- 제목 -->
-      <h1 class="text-h5 text-center q-mb-md" id="page-heading" tabindex="-1">{{ pageTitle }}</h1>
+      <h1 class="text-h5 text-center q-mb-md" >로그인</h1>
 
       <!-- 로그인 폼 -->
       <q-form @submit.prevent="handleLogin" class="q-gutter-md" aria-label="로그인 폼">
@@ -51,11 +51,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useRoute } from 'vue-router'
-import { computed } from 'vue'
 
-const route = useRoute()
-const pageTitle = computed(() => route.meta.title || '로그인 페이지')
 
 const router = useRouter()
 const userId = ref('')
@@ -67,4 +63,8 @@ const handleLogin = () => {
   console.log('✅ 로그인 시도:', userId.value)
   router.push('/')
 }
+
+definePageMeta({
+  title: '로그인 페이지'
+})
 </script>
