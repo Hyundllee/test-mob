@@ -59,10 +59,10 @@ watch(() => route.query.tab, (newTab) => {
 // ✅ 페이지 진입 후 강제 포커싱 제거
 watch(() => route.fullPath, async () => {
   await nextTick()
-  removeQuasarFocusHelpers()
+  removeUnwantedTabindex()
 })
 
 onMounted(() => {
-  removeQuasarFocusHelpers()
+  removeUnwantedTabindex()
 })
 </script>
