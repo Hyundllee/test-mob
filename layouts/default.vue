@@ -8,8 +8,6 @@
       tabindex="-1"
     >
     </div>
-
-
     <AppHeader />
     <q-page-container>
       <NuxtPage />
@@ -35,27 +33,19 @@ onMounted(() => {
 
   // ✅ 페이지 전환 후 포커싱
   router.afterEach((to, from) => {
-    const excludeKey = 'tab'
+  const isTabChangeOnly =
+    to.path === from.path &&
+    to.query.tab !== from.query.tab &&
+    JSON.stringify({ ...to.query, tab: undefined }) === JSON.stringify({ ...from.query, tab: undefined })
 
-    // ❗ tab 외 나머지 쿼리 비교
-    const stripQuery = (query: Record<string, any>, exclude: string) => {
-      const { [exclude]: _, ...rest } = query
-      return rest
-    }
-
-    const tabChangedOnly =
-      to.path === from.path &&
-      to.query.tab !== from.query.tab &&
-      JSON.stringify(stripQuery(to.query, excludeKey)) ===
-        JSON.stringify(stripQuery(from.query, excludeKey))
-
-    if (tabChangedOnly) return // ✅ tab만 바뀐 경우 무시
+  if (isTabChangeOnly) return
 
     setTimeout(() => {
       document.getElementById('top')?.focus()
     }, 250) // ✅ voiceover 안정성 위해 약간 지연
   })
 })
+
 </script>
 
 <style scoped>
