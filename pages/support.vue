@@ -55,4 +55,14 @@ watch(() => route.query.tab, (newTab) => {
     currentTab.value = newTab as string
   }
 })
+
+// ✅ 페이지 진입 후 강제 포커싱 제거
+watch(() => route.fullPath, async () => {
+  await nextTick()
+  removeQuasarFocusHelpers()
+})
+
+onMounted(() => {
+  removeQuasarFocusHelpers()
+})
 </script>

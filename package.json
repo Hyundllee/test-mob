@@ -14,7 +14,7 @@
   "dependencies": {
     "@quasar/extras": "^1.17.0",
     "gh-pages": "^6.3.0",
-    "nuxt": "^3.17.4",
+    "nuxt": "^3.17.5",
     "quasar": "^2.18.1",
     "vue": "^3.5.14",
     "vue-router": "^4.5.1"
