@@ -9,6 +9,7 @@
     >
     </div>
 
+    
     <AppHeader />
     <q-page-container>
       <NuxtPage />
@@ -18,37 +19,33 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { nextTick } from 'vue'
 
-// 라우터 접근
 const router = useRouter()
 
-let prevPath = ''
+onMounted(() => {
+  // ✅ 페이지 전환 전 기존 포커스 제거
+  router.beforeEach((to, from, next) => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur()
+    }
+    next()
+  })
 
-// 페이지 전환 직전 → 클릭 차단
-router.beforeEach((to, from, next) => {
-  prevPath = from.fullPath
-  document.documentElement.style.pointerEvents = 'none'
-  next()
-})
+  // ✅ 페이지 전환 후 최상단으로 포커싱
+router.afterEach((to, from) => {
+  const isTabChangeOnly =
+    to.path === from.path &&
+    to.query.tab !== from.query.tab &&
+    JSON.stringify({ ...to.query, tab: undefined }) === JSON.stringify({ ...from.query, tab: undefined })
 
-// 페이지 전환 후 → 포커싱 복원
-router.afterEach(async (to) => {
-  await nextTick()
+  if (isTabChangeOnly) return
 
-  // ✅ tab 내 쿼리 변경이면 포커스 유지
-  if (to.path === prevPath) {
-    document.documentElement.style.pointerEvents = ''
-    return
-  }
-
-  // ✅ 페이지 전체 이동 시 top 포커싱
   setTimeout(() => {
-    const topEl = document.getElementById('top')
-    topEl?.focus()
-    document.documentElement.style.pointerEvents = ''
-  }, 250)
+    document.getElementById('top')?.focus()
+  }, 200)
+})
 })
 </script>
 
@@ -65,6 +62,4 @@ router.afterEach(async (to) => {
   clip-path: inset(50%);
   border: 0;
 }
-
-
 </style>
