@@ -27,7 +27,7 @@ onMounted(() => {
     setTimeout(() => {
       const topEl = document.getElementById('top')
       topEl?.focus()
-    }, 200) // ✅ VoiceOver 대응 지연시간
+    }, 300) // ✅ VoiceOver 대응 지연시간
   })
 })
 </script>
