@@ -4,12 +4,13 @@ export default defineNuxtConfig({
   modules: ['nuxt-quasar-ui'],
   devtools: { enabled: true },
   compatibilityDate: '2025-05-15',
-  ssr: false, 
-  nitro : {
-  preset : 'github-pages' 
+  ssr: false,
+  app: {
+    baseURL: '/test-mob/',
   },
-  app : {
-  baseURL : '/test-mob/' 
+  nitro: {
+    preset: 'github-pages',
   },
+  
    css: ['@/assets/styles/mobile.scss', '@/assets/styles/mobile.scss',],
 })
