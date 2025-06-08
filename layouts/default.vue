@@ -9,7 +9,7 @@
     >
     </div>
 
-    
+
     <AppHeader />
     <q-page-container>
       <NuxtPage />
