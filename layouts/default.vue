@@ -33,21 +33,23 @@ onMounted(() => {
 
   // ✅ 페이지 전환 후 포커싱
   router.afterEach((to, from) => {
-  const isTabChangeOnly =
-    to.path === from.path &&
-    to.query.tab !== from.query.tab &&
-    JSON.stringify({ ...to.query, tab: undefined }) === JSON.stringify({ ...from.query, tab: undefined })
+    // tab만 바뀌었는지 확인
+    const onlyTabChanged = (
+      to.path === from.path &&
+      to.query.tab !== from.query.tab &&
+      // 나머지 query가 같아야 함
+      JSON.stringify({ ...to.query, tab: undefined }) ===
+      JSON.stringify({ ...from.query, tab: undefined })
+    )
 
-  if (isTabChangeOnly) return
+    if (onlyTabChanged) return // ✅ 탭만 바뀐 경우 포커싱 무시
 
     setTimeout(() => {
       document.getElementById('top')?.focus()
-    }, 250) // ✅ voiceover 안정성 위해 약간 지연
+    }, 250)
   })
 })
-
 </script>
-
 <style scoped>
 /* scoped든 global이든 */
 .sr-only {
