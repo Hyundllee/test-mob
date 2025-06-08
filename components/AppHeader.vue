@@ -13,7 +13,7 @@
       />
 
       <q-toolbar-title>
-        <h1  class="text-h6 q-ma-none" >접근성 프로젝트욝오 !!!</h1>
+        <h1  class="text-h6 q-ma-none" >접근성 프로젝트욝오오 !!!</h1>
       </q-toolbar-title>
     </q-toolbar>
   </q-header>
