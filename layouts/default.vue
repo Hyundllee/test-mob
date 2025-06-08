@@ -1,10 +1,12 @@
 <!-- layouts/default.vue -->
 <template>
   <q-layout view="lHh Lpr lFf">
-    <!-- 페이지 진입 알림용 -->
+    <!-- 스크린리더용 페이지 시작 알림 -->
     <div
       id="page-start"
       class="sr-only"
+      role="heading"
+      aria-level="1"
       tabindex="-1"
       :aria-label="`${pageTitle} 시작`"
     >
@@ -21,23 +23,25 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, watch, ref } from 'vue'
+import { nextTick, watch, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
-// 페이지 제목 가져오기
+
 const pageTitle = computed(() => route.meta.title || '페이지')
 
+// 포커스 이동 처리
 watch(
   () => route.fullPath,
   async () => {
     await nextTick()
 
-    // 스크롤 상단 이동
+    // 스크롤 최상단 이동
     window.scrollTo({ top: 0 })
 
-    // 페이지 시작 영역 포커싱
+    // 강제 포커싱 (일부 Quasar 요소가 방해하는 경우가 있음)
     const el = document.getElementById('page-start')
-    el?.focus()
+    el?.focus?.()
   }
 )
 </script>

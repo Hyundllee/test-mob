@@ -60,7 +60,7 @@ import Step3Verify from '~/components/register/Step3Verify.vue'
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
 definePageMeta({
-  title: '회원가입'
+  title: '회원가입 페이지'
 })
 const route = useRoute()
 

@@ -37,7 +37,7 @@ import SupportNotice from '~/components/support/SupportNotice.vue'
 import SupportContact from '~/components/support/SupportContact.vue'
 
 definePageMeta({
-  title: '고객센터'
+  title: '고객센터 페이지'
 })
 
 const route = useRoute()
