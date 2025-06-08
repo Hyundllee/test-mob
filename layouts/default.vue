@@ -18,28 +18,43 @@
   </q-layout>
 </template>
 
-<script setup>
-import { nextTick } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const route = useRoute()
 
-let previousPath = route.path
-
-router.afterEach((to, from) => {
-  const isSamePath = to.path === from.path
-
-  if (isSamePath) return // ✅ query(tab) 변경처럼 페이지 전환이 아닐 경우 무시
-
-  nextTick(() => {
-    setTimeout(() => {
-      const el = document.getElementById('top')
-      el?.focus({ preventScroll: true })
-    }, 250)
+onMounted(() => {
+  // ✅ 페이지 전환 전 포커스 제거
+  router.beforeEach((to, from, next) => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur()
+    }
+    next()
   })
 
-  previousPath = to.path
+  // ✅ 페이지 전환 후 포커싱
+  router.afterEach((to, from) => {
+    const excludeKey = 'tab'
+
+    // ❗ tab 외 나머지 쿼리 비교
+    const stripQuery = (query: Record<string, any>, exclude: string) => {
+      const { [exclude]: _, ...rest } = query
+      return rest
+    }
+
+    const tabChangedOnly =
+      to.path === from.path &&
+      to.query.tab !== from.query.tab &&
+      JSON.stringify(stripQuery(to.query, excludeKey)) ===
+        JSON.stringify(stripQuery(from.query, excludeKey))
+
+    if (tabChangedOnly) return // ✅ tab만 바뀐 경우 무시
+
+    setTimeout(() => {
+      document.getElementById('top')?.focus()
+    }, 250) // ✅ voiceover 안정성 위해 약간 지연
+  })
 })
 </script>
 
