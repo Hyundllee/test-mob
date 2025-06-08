@@ -9,8 +9,6 @@
     >
     </div>
 
-       <!-- ✅ 클릭 보호용 오버레이 -->
-    <div v-if="isTransitioning" class="click-blocker" aria-hidden="true" ></div>
     <AppHeader />
     <q-page-container>
       <NuxtPage />
@@ -20,27 +18,37 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { nextTick } from 'vue'
 
+// 라우터 접근
 const router = useRouter()
-const isTransitioning = ref(false)
 
-router.afterEach((to, from) => {
-  const isSamePath = to.path === from.path
-  const onlyQueryChanged = isSamePath && JSON.stringify(to.query) !== JSON.stringify(from.query)
-  if (onlyQueryChanged) return
+let prevPath = ''
 
-  // ✅ 클릭 방지 시작
-  isTransitioning.value = true
+// 페이지 전환 직전 → 클릭 차단
+router.beforeEach((to, from, next) => {
+  prevPath = from.fullPath
+  document.documentElement.style.pointerEvents = 'none'
+  next()
+})
 
+// 페이지 전환 후 → 포커싱 복원
+router.afterEach(async (to) => {
+  await nextTick()
+
+  // ✅ tab 내 쿼리 변경이면 포커스 유지
+  if (to.path === prevPath) {
+    document.documentElement.style.pointerEvents = ''
+    return
+  }
+
+  // ✅ 페이지 전체 이동 시 top 포커싱
   setTimeout(() => {
-    // ✅ 최상단 포커싱
-    document.getElementById('top')?.focus()
-
-    // ✅ 클릭 방지 해제
-    isTransitioning.value = false
-  }, 300) // 300ms 동안 클릭 차단 후 포커스 이동
+    const topEl = document.getElementById('top')
+    topEl?.focus()
+    document.documentElement.style.pointerEvents = ''
+  }, 250)
 })
 </script>
 
@@ -59,12 +67,4 @@ router.afterEach((to, from) => {
 }
 
 
-/* ✅ 클릭 방지 오버레이 */
-.click-blocker {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: transparent;
-  pointer-events: all;
-}
 </style>
