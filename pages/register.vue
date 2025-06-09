@@ -55,14 +55,14 @@ definePageMeta({
   title: '회원가입 페이지'
 })
 
-// ✅ 상태
+// ✅ 상태 정의
 const step = ref(1)
 const userType = ref('')
 const terms = ref(false)
 const privacy = ref(false)
 const phone = ref('')
 
-// ✅ step 변화 감지해서 콘솔 + 포커싱 + 스크롤
+// ✅ step 변화 감지 → 항상 최상단으로 포커싱 + 스크롤
 watch(step, async (newVal, oldVal) => {
   if (newVal === oldVal) return
 
@@ -71,15 +71,24 @@ watch(step, async (newVal, oldVal) => {
   await nextTick()
 
   const topEl = document.getElementById('top')
-  if (!topEl) return
+  if (!topEl) {
+    console.warn('⚠️ #top element not found')
+    return
+  }
 
+  // 기존 포커스 해제
   if (document.activeElement instanceof HTMLElement) {
     document.activeElement.blur()
   }
 
+  // 브라우저 렌더 완료 후 포커스 + 스크롤
   requestAnimationFrame(() => {
     topEl.focus()
-    topEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+
+    // 약간의 지연 후 스크롤 보장
+    setTimeout(() => {
+      topEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 50)
   })
 })
 </script>

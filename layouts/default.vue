@@ -1,8 +1,7 @@
 <!--default.vue-->
 <template>
   <q-layout view="lHh Lpr lFf">
-    <!-- ✅ 페이지 최상단 포커스 타겟 -->
-    <div id="top" class="sr-only" tabindex="-1" />
+    <div id="top" class="sr-only" tabindex="-1"  aria-hidden="false" role="region"/>
     <AppHeader />
     <q-page-container>
       <NuxtPage />
