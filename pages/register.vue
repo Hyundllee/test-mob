@@ -10,7 +10,6 @@
           animated
           header-nav
           aria-label="회원가입 단계"
-          @after-transition="handleAfterTransition"
         >
         <q-step :name="1" title="회원유형" subtitle="개인 or 기업 선택" done-icon="check">
           <Step1UserType v-model="userType" />
@@ -46,13 +45,13 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { scrollAndFocusTopOnChange } from '~/utils/scrollAndFocusTopOnChange'
+
 import Step1UserType from '~/components/register/Step1UserType.vue'
 import Step2Terms from '~/components/register/Step2Terms.vue'
 import Step3Verify from '~/components/register/Step3Verify.vue'
 
-definePageMeta({
-  title: '회원가입 페이지'
-})
+definePageMeta({ title: '회원가입 페이지' })
 
 const step = ref(1)
 const userType = ref('')
@@ -60,24 +59,6 @@ const terms = ref(false)
 const privacy = ref(false)
 const phone = ref('')
 
-
-// ✅ step 바뀐 후 포커스 + 스크롤 최상단
-function handleAfterTransition() {
-  const topEl = document.getElementById('top')
-  if (!topEl) {
-    console.warn('⚠️ #top element not found')
-    return
-  }
-
-  if (document.activeElement instanceof HTMLElement) {
-    document.activeElement.blur()
-  }
-
-  requestAnimationFrame(() => {
-    topEl.focus()
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    }, 50)
-  })
-}
+// ✅ step 변경 시 최상단 포커싱 + 스크롤
+scrollAndFocusTopOnChange(step)
 </script>
