@@ -18,9 +18,20 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, type RouteLocationNormalized } from 'vue-router'
 
 const router = useRouter()
+
+function isOnlyTabChanged(to: RouteLocationNormalized, from: RouteLocationNormalized): boolean {
+  const { tab: toTab, ...toRest } = to.query
+  const { tab: fromTab, ...fromRest } = from.query
+
+  return (
+    to.path === from.path &&
+    toTab !== fromTab &&
+    JSON.stringify(toRest) === JSON.stringify(fromRest)
+  )
+}
 
 onMounted(() => {
   router.beforeEach((to, from, next) => {
@@ -31,18 +42,8 @@ onMounted(() => {
   })
 
   router.afterEach((to, from) => {
-    const toPath = to.fullPath.split('?')[0]
-    const fromPath = from.fullPath.split('?')[0]
+    if (isOnlyTabChanged(to, from)) return
 
-    // ✅ 전체 경로가 같고 쿼리만 바뀐 경우 (탭 이동)
-    const isTabChangeOnly = (
-      toPath === fromPath &&
-      to.query.tab !== from.query.tab
-    )
-
-    if (isTabChangeOnly) return // ⛔ 탭 이동이면 포커스 이동 안 함
-
-    // ✅ 일반 페이지 이동 시 포커스 이동
     setTimeout(() => {
       document.getElementById('top')?.focus()
     }, 250)
