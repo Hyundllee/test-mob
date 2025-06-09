@@ -45,7 +45,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { scrollAndFocusTopOnChange } from '~/utils/scrollAndFocusTopOnChange'
+// ✅ 이렇게만 써야 함!
+// import { scrollAndFocusTopOnChange } from '~/utils/scrollAndFocusTopOnChange'
+
+
 
 import Step1UserType from '~/components/register/Step1UserType.vue'
 import Step2Terms from '~/components/register/Step2Terms.vue'
