@@ -11,8 +11,6 @@
         header-nav
         class="q-mb-lg"
         aria-label="회원가입 단계"
-        @before-transition="handleBeforeStepChange"
-        @after-transition="handleAfterStepChange"
       >
         <q-step :name="1" title="회원유형" subtitle="개인 or 기업 선택" done-icon="check">
           <Step1UserType v-model="userType" />
@@ -48,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import Step1UserType from '~/components/register/Step1UserType.vue'
 import Step2Terms from '~/components/register/Step2Terms.vue'
 import Step3Verify from '~/components/register/Step3Verify.vue'
@@ -57,29 +55,31 @@ definePageMeta({
   title: '회원가입 페이지'
 })
 
+// ✅ 상태
 const step = ref(1)
 const userType = ref('')
 const terms = ref(false)
 const privacy = ref(false)
 const phone = ref('')
 
-// ✅ step 바뀌기 전 포커스 정리
-function handleBeforeStepChange () {
+// ✅ step 변화 감지해서 콘솔 + 포커싱 + 스크롤
+watch(step, async (newVal, oldVal) => {
+  if (newVal === oldVal) return
+
+  console.log(`[QStepper] Step changed: ${oldVal} ➜ ${newVal}`)
+
+  await nextTick()
+
+  const topEl = document.getElementById('top')
+  if (!topEl) return
+
   if (document.activeElement instanceof HTMLElement) {
     document.activeElement.blur()
   }
-}
 
-// ✅ step 바뀐 후 최상단 포커스 + 스크롤
-function handleAfterStepChange () {
-  nextTick(() => {
-    const topEl = document.getElementById('top')
-    if (topEl) {
-      requestAnimationFrame(() => {
-        topEl.focus()
-        topEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      })
-    }
+  requestAnimationFrame(() => {
+    topEl.focus()
+    topEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
   })
-}
+})
 </script>
