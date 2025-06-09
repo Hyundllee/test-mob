@@ -47,31 +47,37 @@
 
 <script setup lang="ts">
 import { ref, watch, nextTick } from 'vue'
-
-// 컴포넌트 import
 import Step1UserType from '~/components/register/Step1UserType.vue'
 import Step2Terms from '~/components/register/Step2Terms.vue'
 import Step3Verify from '~/components/register/Step3Verify.vue'
 
-// 페이지 메타
 definePageMeta({
   title: '회원가입 페이지'
 })
 
-// 상태
+// ✅ 상태
 const step = ref(1)
 const userType = ref('')
 const terms = ref(false)
 const privacy = ref(false)
 const phone = ref('')
 
-// ✅ step이 바뀌면 default.vue의 #top에 focus + 스크롤 이동
+// ✅ step 변경 시 default.vue의 #top에 포커스 + 스크롤
 watch(step, async () => {
   await nextTick()
+
   const topEl = document.getElementById('top')
-  if (topEl) {
+  if (!topEl) return
+
+  // 기존 포커스 제거
+  if (document.activeElement instanceof HTMLElement) {
+    document.activeElement.blur()
+  }
+
+  // 렌더 후 안전한 타이밍에 포커스 + 스크롤
+  requestAnimationFrame(() => {
     topEl.focus()
     topEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+  })
 })
 </script>
