@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-md" role="main">
-    <h1 class="text-h5 q-mb-lg" >고객센터</h1>
+    <h1 class="text-h5 q-mb-lg">고객센터</h1>
 
     <q-tabs
       v-model="currentTab"
@@ -8,6 +8,7 @@
       align="justify"
       active-color="primary"
       indicator-color="primary"
+      @click="handleTabClick"
       @update:model-value="updateRoute"
     >
       <q-tab name="FAQ" label="FAQ" />
@@ -15,7 +16,12 @@
       <q-tab name="Contact" label="문의하기" />
     </q-tabs>
 
-    <q-tab-panels v-model="currentTab" animated transition-prev="slide-right" transition-next="slide-left">
+    <q-tab-panels
+      v-model="currentTab"
+      animated
+      transition-prev="slide-right"
+      transition-next="slide-left"
+    >
       <q-tab-panel name="FAQ">
         <SupportFAQ />
       </q-tab-panel>
@@ -44,17 +50,31 @@ const route = useRoute()
 const router = useRouter()
 
 const validTabs = ['FAQ', 'Notice', 'Contact']
-const currentTab = ref(validTabs.includes(route.query.tab as string) ? route.query.tab as string : 'FAQ')
+const currentTab = ref(
+  validTabs.includes(route.query.tab as string)
+    ? (route.query.tab as string)
+    : 'FAQ'
+)
 
-const updateRoute = (newTab: string) => {
-  router.replace({ query: { ...route.query, tab: newTab } })
-}
-
+// query 변경 → 탭 변경
 watch(() => route.query.tab, (newTab) => {
   if (validTabs.includes(newTab as string)) {
     currentTab.value = newTab as string
   }
 })
 
+// ✅ 탭 클릭 시 해당 tab에 포커스 유지
+const handleTabClick = (event: MouseEvent) => {
+  const target = event.target as HTMLElement
+  const tabButton = target.closest('.q-tab') as HTMLElement
+  if (tabButton) {
+    requestAnimationFrame(() => {
+      tabButton.focus()
+    })
+  }
+}
 
+const updateRoute = (newTab: string) => {
+  router.replace({ query: { ...route.query, tab: newTab } })
+}
 </script>
