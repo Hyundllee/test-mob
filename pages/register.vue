@@ -4,14 +4,14 @@
       <h1 class="text-h5 text-center q-mb-lg">회원가입</h1>
 
       <!-- ✅ QStepper -->
-      <q-stepper
-        v-model="step"
-        flat
-        animated
-        header-nav
-        class="q-mb-lg"
-        aria-label="회원가입 단계"
-      >
+        <q-stepper
+          v-model="step"
+          flat
+          animated
+          header-nav
+          aria-label="회원가입 단계"
+          @after-transition="handleAfterTransition"
+        >
         <q-step :name="1" title="회원유형" subtitle="개인 or 기업 선택" done-icon="check">
           <Step1UserType v-model="userType" />
         </q-step>
@@ -25,7 +25,6 @@
         </q-step>
       </q-stepper>
 
-      <!-- ✅ 하단 네비게이션 -->
       <div class="row justify-between q-gutter-sm q-mt-md">
         <q-btn
           label="이전"
@@ -46,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, nextTick } from 'vue'
+import { ref } from 'vue'
 import Step1UserType from '~/components/register/Step1UserType.vue'
 import Step2Terms from '~/components/register/Step2Terms.vue'
 import Step3Verify from '~/components/register/Step3Verify.vue'
@@ -55,40 +54,30 @@ definePageMeta({
   title: '회원가입 페이지'
 })
 
-// ✅ 상태 정의
 const step = ref(1)
 const userType = ref('')
 const terms = ref(false)
 const privacy = ref(false)
 const phone = ref('')
 
-// ✅ step 변화 감지 → 항상 최상단으로 포커싱 + 스크롤
-watch(step, async (newVal, oldVal) => {
-  if (newVal === oldVal) return
 
-  console.log(`[QStepper] Step changed: ${oldVal} ➜ ${newVal}`)
-
-  await nextTick()
-
+// ✅ step 바뀐 후 포커스 + 스크롤 최상단
+function handleAfterTransition() {
   const topEl = document.getElementById('top')
   if (!topEl) {
     console.warn('⚠️ #top element not found')
     return
   }
 
-  // 기존 포커스 해제
   if (document.activeElement instanceof HTMLElement) {
     document.activeElement.blur()
   }
 
-  // 브라우저 렌더 완료 후 포커스 + 스크롤
   requestAnimationFrame(() => {
     topEl.focus()
-
-    // 약간의 지연 후 스크롤 보장
     setTimeout(() => {
-      topEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }, 50)
   })
-})
+}
 </script>
