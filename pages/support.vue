@@ -22,15 +22,9 @@
       transition-prev="slide-right"
       transition-next="slide-left"
     >
-      <q-tab-panel name="FAQ">
-        <SupportFAQ />
-      </q-tab-panel>
-      <q-tab-panel name="Notice">
-        <SupportNotice />
-      </q-tab-panel>
-      <q-tab-panel name="Contact">
-        <SupportContact />
-      </q-tab-panel>
+      <q-tab-panel name="FAQ"><SupportFAQ /></q-tab-panel>
+      <q-tab-panel name="Notice"><SupportNotice /></q-tab-panel>
+      <q-tab-panel name="Contact"><SupportContact /></q-tab-panel>
     </q-tab-panels>
   </q-page>
 </template>
@@ -42,28 +36,24 @@ import SupportFAQ from '~/components/support/SupportFAQ.vue'
 import SupportNotice from '~/components/support/SupportNotice.vue'
 import SupportContact from '~/components/support/SupportContact.vue'
 
-definePageMeta({
-  title: '고객센터 페이지'
-})
+definePageMeta({ title: '고객센터 페이지' })
 
 const route = useRoute()
 const router = useRouter()
 
 const validTabs = ['FAQ', 'Notice', 'Contact']
 const currentTab = ref(
-  validTabs.includes(route.query.tab as string)
-    ? (route.query.tab as string)
-    : 'FAQ'
+  validTabs.includes(route.query.tab as string) ? route.query.tab as string : 'FAQ'
 )
 
-// query 변경 → 탭 변경
+// ✅ URL 쿼리(tab) → 탭 값 반영
 watch(() => route.query.tab, (newTab) => {
   if (validTabs.includes(newTab as string)) {
     currentTab.value = newTab as string
   }
 })
 
-// ✅ 탭 클릭 시 해당 tab에 포커스 유지
+// ✅ 탭 클릭 시 해당 tab 요소에 포커스 유지
 const handleTabClick = (event: MouseEvent) => {
   const target = event.target as HTMLElement
   const tabButton = target.closest('.q-tab') as HTMLElement
@@ -74,6 +64,7 @@ const handleTabClick = (event: MouseEvent) => {
   }
 }
 
+// ✅ 탭 변경 시 URL 쿼리 반영
 const updateRoute = (newTab: string) => {
   router.replace({ query: { ...route.query, tab: newTab } })
 }
