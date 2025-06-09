@@ -1,3 +1,4 @@
+<!--default.vue-->
 <template>
   <q-layout view="lHh Lpr lFf">
     <!-- ✅ 페이지 최상단 포커스 타겟 -->
