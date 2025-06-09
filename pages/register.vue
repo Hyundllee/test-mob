@@ -3,14 +3,13 @@
     <q-card flat bordered class="q-pa-lg shadow-1 register-card">
       <h1 class="text-h5 text-center q-mb-lg">회원가입</h1>
 
-      <!-- ✅ QStepper -->
-        <q-stepper
-          v-model="step"
-          flat
-          animated
-          header-nav
-          aria-label="회원가입 단계"
-        >
+      <q-stepper
+        v-model="step"
+        flat
+        animated
+        header-nav
+        aria-label="회원가입 단계"
+      >
         <q-step :name="1" title="회원유형" subtitle="개인 or 기업 선택" done-icon="check">
           <Step1UserType v-model="userType" />
         </q-step>
@@ -30,13 +29,13 @@
           color="grey-6"
           flat
           :disable="step === 1"
-          @click="step--"
+          @click="goToPrevStep"
         />
         <q-btn
           label="다음"
           color="primary"
           :disable="step === 3"
-          @click="step++"
+          @click="goToNextStep"
         />
       </div>
     </q-card>
@@ -44,12 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-// ✅ 이렇게만 써야 함!
-// import { scrollAndFocusTopOnChange } from '~/utils/scrollAndFocusTopOnChange'
-
-
-
+import { ref, watch } from 'vue'
 import Step1UserType from '~/components/register/Step1UserType.vue'
 import Step2Terms from '~/components/register/Step2Terms.vue'
 import Step3Verify from '~/components/register/Step3Verify.vue'
@@ -62,6 +56,40 @@ const terms = ref(false)
 const privacy = ref(false)
 const phone = ref('')
 
-// ✅ step 변경 시 최상단 포커싱 + 스크롤
-scrollAndFocusTopOnChange(step)
+// ✅ step 변경될 때 탭 포커스
+watch(step, () => {
+  focusActiveStepperTab()
+})
+
+// ✅ 버튼 핸들러
+function goToNextStep() {
+  if (step.value < 3) step.value++
+}
+function goToPrevStep() {
+  if (step.value > 1) step.value--
+}
+
+// ✅ 현재 활성화된 QStepper 탭에 포커스
+function focusActiveStepperTab() {
+  requestAnimationFrame(() => {
+    const activeTab = document.querySelector('.q-stepper__tab--active') as HTMLElement | null
+
+    if (!activeTab) {
+      console.warn('[QStepper] .q-stepper__tab--active not found')
+      return
+    }
+
+    // 포커스 헬퍼 무시
+    const focusHelper = activeTab.querySelector('.q-focus-helper') as HTMLElement | null
+    if (focusHelper) {
+      focusHelper.setAttribute('tabindex', '-1')
+    }
+
+    // 포커스 가능하게 만들고 초점 이동
+    activeTab.setAttribute('tabindex', '0')
+    activeTab.focus()
+
+    console.log('[QStepper] 포커스 이동됨:', activeTab)
+  })
+}
 </script>
