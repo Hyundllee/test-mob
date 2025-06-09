@@ -56,7 +56,7 @@ const terms = ref(false)
 const privacy = ref(false)
 const phone = ref('')
 
-// ✅ step 변경될 때 탭 포커스
+// ✅ step 변경 시 포커스 + 스크롤
 watch(step, () => {
   focusActiveStepperTab()
 })
@@ -69,7 +69,7 @@ function goToPrevStep() {
   if (step.value > 1) step.value--
 }
 
-// ✅ 현재 활성화된 QStepper 탭에 포커스
+// ✅ 활성화된 QStepper 탭에 포커스 + 스크롤 최상단
 function focusActiveStepperTab() {
   requestAnimationFrame(() => {
     const activeTab = document.querySelector('.q-stepper__tab--active') as HTMLElement | null
@@ -79,17 +79,22 @@ function focusActiveStepperTab() {
       return
     }
 
-    // 포커스 헬퍼 무시
+    // q-focus-helper는 무시되도록 유지
     const focusHelper = activeTab.querySelector('.q-focus-helper') as HTMLElement | null
     if (focusHelper) {
       focusHelper.setAttribute('tabindex', '-1')
     }
 
-    // 포커스 가능하게 만들고 초점 이동
+    // 포커스 이동
     activeTab.setAttribute('tabindex', '0')
     activeTab.focus()
 
-    console.log('[QStepper] 포커스 이동됨:', activeTab)
+    // 스크롤도 최상단으로 이동
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, 50)
+
+    console.log('[QStepper] 포커스 및 스크롤 이동 완료:', activeTab)
   })
 }
 </script>
