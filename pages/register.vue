@@ -65,12 +65,13 @@ const terms = ref(false)
 const privacy = ref(false)
 const phone = ref('')
 
-// ✅ step 변경 시 default.vue의 #top 요소에 포커스 이동
+// ✅ step이 바뀌면 default.vue의 #top에 focus + 스크롤 이동
 watch(step, async () => {
   await nextTick()
   const topEl = document.getElementById('top')
   if (topEl) {
     topEl.focus()
+    topEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 })
 </script>
